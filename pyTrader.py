@@ -54,3 +54,6 @@ yFdata['Gar_Klass_Volatility'] = ((np.log(yFdata['high'] - np.log(yFdata['low'])
 # calculate RSI using pamda_ta
 yFdata['tickerGroup'] = yFdata.groupby(level=1)['Adj Close'].transform(lambda x: pandas_ta.rsi(close=x, length=20))
 #----------------------------------------------------------------------------------------------------------
+
+# Check to see if data was imported correctly, using Apple and plot it as a graph
+yFdata.xs('AAPL', level=1)['rsi'].plot()
