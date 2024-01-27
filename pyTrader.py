@@ -75,3 +75,25 @@ yFdata['bb_low'] = yFdata.groupby(level=1)['adj close'].transform(lambda x: pand
 yFdata['bb_mid'] = yFdata.groupby(level=1)['adj close'].transform(lambda x: pandas_ta.bbands(close=np.log1(x), length=20).iloc[:, 1])
 yFdata['bb_high'] = yFdata.groupby(level=1)['adj close'].transform(lambda x: pandas_ta.bbands(close=np.log1(x), length=20).iloc[:, 2])
 
+# ATR stands for Average True Range. Average True Range is a technical indicator that measures market volatility
+# Higher ATR values indicate higher volatility, while lower values suggest lower volatility.
+# Understanding volatility is crucial for traders as it influences the potential risk and reward of a trade.
+def ATR_compute(stock_data): 
+    atr = pandas_ta.atr(high=stock_data['high'], low=stock_data['low'], close=stock_data['adj close'], length=14)
+    return atr.sub(atr.mean()).div(atr.std())
+# To prevent the date column from doubling, we disable group keys.
+yFdata['atr'] = yFdata.groupby(level=1, group_keys=False).apply(ATR_compute)
+
+# MACD is a technical analysis tool developed by John Bollinger.
+# To break down the following code lines, I have also broken down what the fast, slow, and signal mean:
+# * The "fast" length refers to the number of periods used for the fast exponential moving average (EMA) component of the MACD.
+# * The fast EMA is more responsive to recent price changes compared to the slow EMA.
+# - The "slow" length refers to the number of periods used for the slow exponential moving average (EMA) component of the MACD.
+# - The slow EMA is smoother and less responsive to short-term price changes than the fast EMA.
+# + The "signal" length refers to the number of periods used for the signal line, which is another EMA derived from the MACD line.
+# + The signal line is used to generate trading signals and identify potential trend reversals.
+def MACD_compute(close):
+    macd = pandas_ta.macd(close=close, length=20, fast=12, slow=26, signal=9).iloc[:,0]
+    return macd.sub(macd.mean()).div(macd.std())
+# For this machine learning model, the data will be CLUSTERED
+yFdata['macd'] = yFdata.groupby(level=1, group_keys=False)['adj close'].apply(MACD_compute)
