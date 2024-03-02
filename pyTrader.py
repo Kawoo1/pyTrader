@@ -1,6 +1,5 @@
 # This trader was created with assistance from freeCodeCamp.org, stackoverflow.com, and chatGPT
 # In total though, the code was written by myself: Kyle Shanahan. And meant to be used for educational purposes only.
-# Please do not redistribute. Thank you. -Kyle Shanahan
 
 # Descriptionm of the program:
 # -pyTrader takes data from the S&P 500 index and uses a machine learning model to predict stock price movement.
